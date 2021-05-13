@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AutoplaySettings
   m_EditorClassIdentifier: 
   lifesTotal: 5
-  isAutoplayMode: 1
+  isAutoplayMode: 0
