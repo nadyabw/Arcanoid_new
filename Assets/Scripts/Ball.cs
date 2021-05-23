@@ -5,17 +5,21 @@ using Random = UnityEngine.Random;
 public class Ball : MonoBehaviour
 {
     #region Variables
-
+    [Header("Base settings")]
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private float gameSpeed = 8f;
     [SerializeField] private float startForceValue = 350f;
     [SerializeField] private float startOffsetY = -3.1f;
     
     [SerializeField] private Transform padTransform;
     [SerializeField] private TrailRenderer trailRenderer;
-
+    [Header("Random Direction")]
     [SerializeField] private Vector2 minRandomDirection = new Vector2(-1f, 1f);
     [SerializeField] private Vector2 maxRandomDirection = new Vector2(0.85f, 1f);
+    
+    [Header("Speed settings")]
+    [SerializeField] private float gameSpeed;
+    [SerializeField] private float minSpeed = 6f;
+    [SerializeField] private float maxSpeed = 12f;
 
     private bool isStarted;
 
@@ -28,6 +32,17 @@ public class Ball : MonoBehaviour
     #endregion
 
     #region Unity lifecycle
+    private void OnEnable()
+    {
+        PickUpSpeed.OnPickUpSpeedCollected += HandlePickUpSpeed;
+      
+    }
+
+    private void OnDisable()
+    {
+        PickUpSpeed.OnPickUpSpeedCollected -= HandlePickUpSpeed;
+      
+    }
 
     private void Start()
     {
@@ -63,6 +78,10 @@ public class Ball : MonoBehaviour
 
     #endregion
 
+
+
+    #region Private methods
+    
     private void OnCollisionExit2D(Collision2D collision)
     {
         if(isStarted)
@@ -70,8 +89,6 @@ public class Ball : MonoBehaviour
             rb.velocity = gameSpeed * (rb.velocity.normalized);
         }
     }
-
-    #region Private methods
 
     private void StartBall()
     {
@@ -84,6 +101,19 @@ public class Ball : MonoBehaviour
         Vector2 force = (new Vector2(dirX, dirY).normalized) * startForceValue;
         rb.AddForce(force);
     }
-
+    private void ChangeSpeed(float speedFactor)
+    {
+        gameSpeed *= speedFactor;
+        gameSpeed = Mathf.Clamp(gameSpeed, minSpeed, maxSpeed);
+    }
+    
+ 
+    #endregion
+    
+    #region Event handlers
+    private void HandlePickUpSpeed(PickUpSpeed ps)
+    {
+        ChangeSpeed(ps.SpeedFactor);
+    }
     #endregion
 }

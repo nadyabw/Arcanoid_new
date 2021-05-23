@@ -6,9 +6,7 @@ public class GameOverView : MonoBehaviour
 {
     #region Variables
 
-    [Header("UI")]
-
-    [SerializeField] private Button playAgainButton;
+    [Header("UI")] [SerializeField] private Button playAgainButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private Text scoreText;
 
@@ -40,7 +38,11 @@ public class GameOverView : MonoBehaviour
 
     private void ExitClickHandler()
     {
-        Application.Quit();
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
+            Application.Quit();
+    #endif
     }
 
     #endregion

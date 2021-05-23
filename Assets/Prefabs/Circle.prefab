@@ -117,3 +117,8 @@ MonoBehaviour:
   stateSprites:
   - {fileID: 21300000, guid: ef38465d7efebff42a2373161af62adb, type: 3}
   - {fileID: 21300000, guid: 8045c3db4fa63fc4d89fbac97828b2d8, type: 3}
+  isUnderstroyable: 0
+  isInvisible: 0
+  pickUpPrefabs:
+  - {fileID: 7824714240583724469, guid: a2da90a390f089948a6df46ccf775d21, type: 3}
+  - {fileID: 7824714240583724469, guid: a2da90a390f089948a6df46ccf775d21, type: 3}

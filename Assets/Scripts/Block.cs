@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class Block : MonoBehaviour
@@ -12,6 +13,9 @@ public class Block : MonoBehaviour
     [SerializeField] private Sprite[] stateSprites; //массив для картинок
     [SerializeField] private bool isUnderstroyable = false; // неубиваемый
     [SerializeField] private bool isInvisible = false; // невидимый
+    [SerializeField] private GameObject[] pickUpPrefabs;
+    [Range (1, 100)]
+    [SerializeField] private int bonusCreateProbability = 30;
 
     private int currentHits;
 
@@ -84,8 +88,7 @@ public class Block : MonoBehaviour
         currentHits++;
         if (currentHits == NumberHit) // если удар последний
         {
-            OnDestroy?.Invoke(this);
-            Destroy(gameObject);
+            DestroyBlock();
         }
         else
         {
@@ -93,12 +96,31 @@ public class Block : MonoBehaviour
         }
     }
 
+    private void DestroyBlock()
+
+    {
+        if (IsNeedToCreateBonus())
+        {
+            int randIndex = Random.Range(0, pickUpPrefabs.Length);
+            Instantiate(pickUpPrefabs[randIndex], transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
+        
+    }
+
+    
     private void UpdateView() // обновление картинки
     {
         if (currentHits < stateSprites.Length)
         {
             spriteRenderer.sprite = stateSprites[currentHits];
         }
+    }
+    private bool IsNeedToCreateBonus()
+    {
+        int randNum = Random.Range(1, 101);
+
+        return randNum <= bonusCreateProbability; 
     }
 
     #endregion

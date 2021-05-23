@@ -22,6 +22,7 @@ public class Game : MonoBehaviour
     private static int totalScore = 0;
     private static bool isPaused;
     private static bool isAutoplay;
+    
 
     #endregion
 
@@ -55,10 +56,10 @@ public class Game : MonoBehaviour
         {
             TogglePause();
         }
-        // чит код для добавления жизней
+        // код для добавления жизней
         if (Input.GetKeyDown(KeyCode.F))
         {
-            AddLife();
+           AddLife(1);
         }
     }
 
@@ -83,6 +84,8 @@ public class Game : MonoBehaviour
         Floor.onBallLoss += HandleBallLoss;
         PauseView.OnClose += HandlePauseClose;
         GameOverView.OnClose += HandleGameOverClose;
+        PickUpScore.OnPickUpScoreCollected += HandlePickUpScoreDownCollected;
+        PickUpLifes.OnPickUpLifeCollected += HandlePickUpLifeCollected;
     }
 
     private void RemoveHandlers()
@@ -92,6 +95,8 @@ public class Game : MonoBehaviour
         Floor.onBallLoss -= HandleBallLoss;
         PauseView.OnClose -= HandlePauseClose;
         GameOverView.OnClose -= HandleGameOverClose;
+        PickUpScore.OnPickUpScoreCollected -= HandlePickUpScoreDownCollected;
+        PickUpLifes.OnPickUpLifeCollected += HandlePickUpLifeCollected;
     }
 
     private void HandleGameOverClose()
@@ -125,8 +130,20 @@ public class Game : MonoBehaviour
 
         if (blocksNumberToFinish == 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
+            {
+                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else
+            {
+                SceneManager.LoadScene(0);
+            }
         }
+    }
+    private void HandlePickUpScoreDownCollected(PickUpScore psd)
+    {
+        AddScore(psd.Score);
     }
 
     private void HandleBlockCreate(bool isUndestroyable)
@@ -152,7 +169,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void AddScore(int value)
+    public void AddScore(int value)
     {
         totalScore += value;
         UpdeteScoreText();
@@ -162,15 +179,35 @@ public class Game : MonoBehaviour
     {
         textScore.text = $"Score: {totalScore}";
     }
-   
-    private void AddLife()
-    {
-        if(lifesLeft < settings.lifesTotal)
-        {
-            lifesLeft++;
-            lifesView.UpdateLifes(lifesLeft);
-        }
-    }
     
+    private void HandlePickUpLifeCollected(PickUpLifes plu)
+    {
+        if (plu.IsLifeAdd == true)
+            AddLife(1);
+        else
+        {
+            AddLife(-1);
+        }
+        
+    }
+
+    private void AddLife(int lifesNum)
+    {
+        lifesLeft += lifesNum;
+        if (lifesLeft > settings.lifesTotal)
+        {
+            lifesLeft = settings.lifesTotal;
+        }
+        else if (lifesLeft <= 0)
+        {
+            isPaused = true;
+            Instantiate(gameOverPrefab, canvasTransform);
+        }
+
+        lifesView.UpdateLifes(lifesLeft);
+    }
+
     #endregion
+
+   
 }
