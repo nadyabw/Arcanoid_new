@@ -9,7 +9,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float startForceValue = 350f;
     [SerializeField] private float startOffsetY = -3.1f;
-    
+    [SerializeField] private Pad pad;
     [SerializeField] private Transform padTransform;
     [SerializeField] private TrailRenderer trailRenderer;
     [Header("Random Direction")]
@@ -21,6 +21,11 @@ public class Ball : MonoBehaviour
     [SerializeField] private float minSpeed = 6f;
     [SerializeField] private float maxSpeed = 12f;
 
+    [Header("Size settings")]
+    [SerializeField] private float minSizeFactor = 0.5f;
+    [SerializeField] private float maxSizeFactor = 1.5f;
+
+    private float XOffsetFromPadCentre;
     private bool isStarted;
 
     #endregion
@@ -35,12 +40,14 @@ public class Ball : MonoBehaviour
     private void OnEnable()
     {
         PickUpSpeed.OnPickUpSpeedCollected += HandlePickUpSpeed;
+        PickUpBallSize.OnPickUpBallSizeCollected += HandlePickUpSize;
       
     }
 
     private void OnDisable()
     {
         PickUpSpeed.OnPickUpSpeedCollected -= HandlePickUpSpeed;
+        PickUpBallSize.OnPickUpBallSizeCollected -= HandlePickUpSize;
       
     }
 
@@ -97,14 +104,29 @@ public class Ball : MonoBehaviour
 
         float dirX = Random.Range(minRandomDirection.x, maxRandomDirection.x);
         float dirY = Random.Range(minRandomDirection.y, maxRandomDirection.y);
-
-        Vector2 force = (new Vector2(dirX, dirY).normalized) * startForceValue;
-        rb.AddForce(force);
+        rb.velocity = (new Vector2(dirX, dirY).normalized) * gameSpeed;
+       
+    }
+    private void ChangeSize(float sizeFactor)
+    {
+        Vector3 size = transform.localScale;
+        size.x *= sizeFactor;
+        size.x = Mathf.Clamp(size.x, minSizeFactor, maxSizeFactor);
+        size.y = size.x;
+        transform.localScale = size;
     }
     private void ChangeSpeed(float speedFactor)
     {
         gameSpeed *= speedFactor;
         gameSpeed = Mathf.Clamp(gameSpeed, minSpeed, maxSpeed);
+    }
+    private void StopBall()
+    {
+        isStarted = false;
+        trailRenderer.enabled = false;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        XOffsetFromPadCentre = transform.position.x - pad.transform.position.x;
     }
     
  
@@ -114,6 +136,21 @@ public class Ball : MonoBehaviour
     private void HandlePickUpSpeed(PickUpSpeed ps)
     {
         ChangeSpeed(ps.SpeedFactor);
+    }
+    private void HandlePickUpSize(PickUpBallSize pbs)
+    {
+        ChangeSize(pbs.SizeFactor);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(Tags.Pad))
+        {
+            if(pad.IsSticky)
+            {
+                StopBall();
+            }
+        }
     }
     #endregion
 }

@@ -118,6 +118,9 @@ public class Block : MonoBehaviour
     }
     private bool IsNeedToCreateBonus()
     {
+        if ((pickUpPrefabs == null) || (pickUpPrefabs.Length == 0))
+            return false;
+
         int randNum = Random.Range(1, 101);
 
         return randNum <= bonusCreateProbability; 

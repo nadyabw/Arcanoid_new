@@ -5,9 +5,14 @@ public class Pad : MonoBehaviour
     #region Variables
 
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private float minWidthFactor = 0.5f;
+    [SerializeField] private float maxWidthFactor = 1.5f;
 
     private float horizontalLimit;
     private Ball ball;
+    private bool isSticky = false;
+    public bool IsSticky { get => isSticky;}
+
 
     #endregion
 
@@ -16,11 +21,13 @@ public class Pad : MonoBehaviour
     private void OnEnable()
     {
         Ball.OnCreate += HandleBallCreate;
+        PickUpPadWidth.OnPickUpPadWidthCollected += HandlePickUpWidthCollected;
     }
 
     private void OnDisable()
     {
         Ball.OnCreate -= HandleBallCreate;
+        PickUpPadWidth.OnPickUpPadWidthCollected -= HandlePickUpWidthCollected;
     }
 
     private void Start()
@@ -66,6 +73,30 @@ public class Pad : MonoBehaviour
     private void HandleBallCreate(Ball b)
     {
         ball = b;
+    }
+    private void HandlePickUpStickyCollected(PickUpSticky ps)
+    {
+        isSticky = true;
+    }
+    private void HandlePickUpWidthCollected(PickUpPadWidth pw)
+    {
+        ChangeWidth(pw.WidthFactor);
+    }
+    private void ChangeWidth(float widthFactor)
+    {
+        Vector3 size = transform.localScale;
+        size.x *= widthFactor;
+        size.x = Mathf.Clamp(size.x, minWidthFactor, maxWidthFactor);
+        transform.localScale = size;
+
+        CalcHorizontalLimit();
+    }
+    private void CalcHorizontalLimit()
+    {
+        Vector2 screenSizeWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        float padWidthWorld = spriteRenderer.bounds.size.x;
+
+        horizontalLimit = screenSizeWorld.x - padWidthWorld / 2;
     }
 
     #endregion

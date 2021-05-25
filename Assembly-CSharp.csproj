@@ -62,9 +62,12 @@
      <Compile Include="Assets\Scripts\Pad.cs" />
      <Compile Include="Assets\Scripts\PauseView.cs" />
      <Compile Include="Assets\Scripts\PickUps\BasePickUp.cs" />
+     <Compile Include="Assets\Scripts\PickUps\PickUpBallSize.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpLifes.cs" />
+     <Compile Include="Assets\Scripts\PickUps\PickUpPadWidth.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpScore.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpSpeed.cs" />
+     <Compile Include="Assets\Scripts\PickUps\PickUpSticky.cs" />
      <Compile Include="Assets\Scripts\Tags.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>F:/Course/Arcanoid_new/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
