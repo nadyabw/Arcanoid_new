@@ -858,7 +858,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &416694650
 PrefabInstance:
@@ -1509,6 +1509,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6205791998469860247}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &904948482 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6365819860455149387, guid: 4592c5020e239444082c23c632a4979b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6205791998469860247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904948480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d77f669e4756a4ea9f3ba78f30b2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &904948483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6205791998275846292, guid: 4592c5020e239444082c23c632a4979b,
@@ -1746,7 +1758,7 @@ Transform:
   - {fileID: 967535395}
   - {fileID: 1051118598}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1022767580
 PrefabInstance:
@@ -3815,7 +3827,7 @@ PrefabInstance:
     - target: {fileID: 6205791998275846292, guid: 4592c5020e239444082c23c632a4979b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6205791998275846292, guid: 4592c5020e239444082c23c632a4979b,
         type: 3}
@@ -3965,7 +3977,7 @@ PrefabInstance:
     - target: {fileID: 7702731832838481760, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7702731832838481760, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
         type: 3}
@@ -4068,6 +4080,11 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 977833382}
+    - target: {fileID: 7702731832838481773, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
+        type: 3}
+      propertyPath: pad
+      value: 
+      objectReference: {fileID: 904948482}
     - target: {fileID: 7702731832838481773, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
         type: 3}
       propertyPath: speed

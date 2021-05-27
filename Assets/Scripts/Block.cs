@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class Block : MonoBehaviour
 {
     #region Variables
-   
+
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private int NumberHit;
     [SerializeField] private int scoreForDestroy;
@@ -14,8 +14,7 @@ public class Block : MonoBehaviour
     [SerializeField] private bool isUnderstroyable = false; // неубиваемый
     [SerializeField] private bool isInvisible = false; // невидимый
     [SerializeField] private GameObject[] pickUpPrefabs;
-    [Range (1, 100)]
-    [SerializeField] private int bonusCreateProbability = 30;
+    [Range(1, 100)] [SerializeField] private int bonusCreateProbability = 30;
 
     private int currentHits;
 
@@ -40,12 +39,12 @@ public class Block : MonoBehaviour
     {
         UpdateView();
 
-        if(isInvisible)
+        if (isInvisible)
         {
-            SetVisible(false);      // делаем полностью невидимым
+            SetVisible(false); // делаем полностью невидимым
         }
 
-        OnCreate?.Invoke(isUnderstroyable); 
+        OnCreate?.Invoke(isUnderstroyable);
     }
 
     #endregion
@@ -54,13 +53,13 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(isInvisible)
+        if (isInvisible)
         {
-            SetVisible(true);  // делаем видимым при 1 ударе, но удар не засчитываем и не меняем спрайт
+            SetVisible(true); // делаем видимым при 1 ударе, но удар не засчитываем и не меняем спрайт
             return;
         }
 
-        if(!isUnderstroyable) 
+        if (!isUnderstroyable)
         {
             Hit();
         }
@@ -104,11 +103,12 @@ public class Block : MonoBehaviour
             int randIndex = Random.Range(0, pickUpPrefabs.Length);
             Instantiate(pickUpPrefabs[randIndex], transform.position, Quaternion.identity);
         }
+
         Destroy(gameObject);
-        
+        OnDestroy?.Invoke(this);
     }
 
-    
+
     private void UpdateView() // обновление картинки
     {
         if (currentHits < stateSprites.Length)
@@ -116,6 +116,7 @@ public class Block : MonoBehaviour
             spriteRenderer.sprite = stateSprites[currentHits];
         }
     }
+
     private bool IsNeedToCreateBonus()
     {
         if ((pickUpPrefabs == null) || (pickUpPrefabs.Length == 0))
@@ -123,7 +124,7 @@ public class Block : MonoBehaviour
 
         int randNum = Random.Range(1, 101);
 
-        return randNum <= bonusCreateProbability; 
+        return randNum <= bonusCreateProbability;
     }
 
     #endregion

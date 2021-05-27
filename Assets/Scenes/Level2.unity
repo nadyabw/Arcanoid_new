@@ -1275,6 +1275,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6205791998469860247}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &904948482 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6365819860455149387, guid: 4592c5020e239444082c23c632a4979b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6205791998469860247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904948480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d77f669e4756a4ea9f3ba78f30b2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &904948483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6205791998275846292, guid: 4592c5020e239444082c23c632a4979b,
@@ -3041,6 +3053,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Walls
       objectReference: {fileID: 0}
+    - target: {fileID: 6046283723701649088, guid: 040e3208b26e1524c9b6dddaf64ee24d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Walls
+      objectReference: {fileID: 0}
     - target: {fileID: 6046283723701649103, guid: 040e3208b26e1524c9b6dddaf64ee24d,
         type: 3}
       propertyPath: m_RootOrder
@@ -3095,6 +3112,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046283724060560780, guid: 040e3208b26e1524c9b6dddaf64ee24d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Floor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 040e3208b26e1524c9b6dddaf64ee24d, type: 3}
@@ -3169,6 +3191,11 @@ PrefabInstance:
     - target: {fileID: 6205791998275846295, guid: 4592c5020e239444082c23c632a4979b,
         type: 3}
       propertyPath: m_Name
+      value: Pad
+      objectReference: {fileID: 0}
+    - target: {fileID: 6205791998275846295, guid: 4592c5020e239444082c23c632a4979b,
+        type: 3}
+      propertyPath: m_TagString
       value: Pad
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3301,11 +3328,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 7702731832838481762, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
+        type: 3}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
     - target: {fileID: 7702731832838481773, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
         type: 3}
       propertyPath: rb
       value: 
       objectReference: {fileID: 977833382}
+    - target: {fileID: 7702731832838481773, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
+        type: 3}
+      propertyPath: pad
+      value: 
+      objectReference: {fileID: 904948482}
     - target: {fileID: 7702731832838481773, guid: 3f15c037960d14a41b421f7ad7cd8bb9,
         type: 3}
       propertyPath: speed

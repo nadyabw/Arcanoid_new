@@ -11,8 +11,11 @@ public class Pad : MonoBehaviour
     private float horizontalLimit;
     private Ball ball;
     private bool isSticky = false;
-    public bool IsSticky { get => isSticky;}
 
+    public bool IsSticky
+    {
+        get => isSticky;
+    }
 
     #endregion
 
@@ -22,20 +25,19 @@ public class Pad : MonoBehaviour
     {
         Ball.OnCreate += HandleBallCreate;
         PickUpPadWidth.OnPickUpPadWidthCollected += HandlePickUpWidthCollected;
+        PickUpSticky.OnPickUpStickyCollected += HandlePickUpStickyCollected;
     }
 
     private void OnDisable()
     {
         Ball.OnCreate -= HandleBallCreate;
         PickUpPadWidth.OnPickUpPadWidthCollected -= HandlePickUpWidthCollected;
+        PickUpSticky.OnPickUpStickyCollected -= HandlePickUpStickyCollected;
     }
 
     private void Start()
     {
-        Vector2 screenSizeWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        float padWidthWorld = spriteRenderer.bounds.size.x;
-
-        horizontalLimit = screenSizeWorld.x - padWidthWorld / 2;
+        CalcHorizontalLimit();
     }
 
     private void Update()
@@ -66,6 +68,7 @@ public class Pad : MonoBehaviour
 
             padPos = new Vector3(worldPos.x, transform.position.y, 0);
         }
+
         padPos.x = Mathf.Clamp(padPos.x, -horizontalLimit, horizontalLimit);
         transform.position = padPos;
     }
@@ -74,14 +77,17 @@ public class Pad : MonoBehaviour
     {
         ball = b;
     }
+
     private void HandlePickUpStickyCollected(PickUpSticky ps)
     {
         isSticky = true;
     }
+
     private void HandlePickUpWidthCollected(PickUpPadWidth pw)
     {
         ChangeWidth(pw.WidthFactor);
     }
+
     private void ChangeWidth(float widthFactor)
     {
         Vector3 size = transform.localScale;
@@ -91,6 +97,7 @@ public class Pad : MonoBehaviour
 
         CalcHorizontalLimit();
     }
+
     private void CalcHorizontalLimit()
     {
         Vector2 screenSizeWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));

@@ -62,6 +62,7 @@
      <Compile Include="Assets\Scripts\Pad.cs" />
      <Compile Include="Assets\Scripts\PauseView.cs" />
      <Compile Include="Assets\Scripts\PickUps\BasePickUp.cs" />
+     <Compile Include="Assets\Scripts\PickUps\PickUpAddBalls.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpBallSize.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpLifes.cs" />
      <Compile Include="Assets\Scripts\PickUps\PickUpPadWidth.cs" />

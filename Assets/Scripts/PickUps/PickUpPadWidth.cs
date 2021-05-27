@@ -7,7 +7,10 @@ public class PickUpPadWidth : BasePickUp
 
     public static event Action<PickUpPadWidth> OnPickUpPadWidthCollected;
 
-    public float WidthFactor { get => widthFactor; }
+    public float WidthFactor
+    {
+        get => widthFactor;
+    }
 
     protected override void ApplyEffect()
     {

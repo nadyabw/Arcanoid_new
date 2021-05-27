@@ -132,4 +132,5 @@ MonoBehaviour:
   isInvisible: 0
   pickUpPrefabs:
   - {fileID: 7824714240583724469, guid: f265aea39fd11c040ad5abbbd1d9a19a, type: 3}
-  - {fileID: 7824714240583724469, guid: 59b6f9ad7258c774386007b87f2b92ec, type: 3}
+  - {fileID: 7824714240583724469, guid: a2da90a390f089948a6df46ccf775d21, type: 3}
+  bonusCreateProbability: 75

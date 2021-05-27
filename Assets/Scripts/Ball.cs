@@ -7,10 +7,8 @@ public class Ball : MonoBehaviour
     #region Variables
     [Header("Base settings")]
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private float startForceValue = 350f;
-    [SerializeField] private float startOffsetY = -3.1f;
+    [SerializeField] private float startOffsetY = 0.6f;
     [SerializeField] private Pad pad;
-    [SerializeField] private Transform padTransform;
     [SerializeField] private TrailRenderer trailRenderer;
     [Header("Random Direction")]
     [SerializeField] private Vector2 minRandomDirection = new Vector2(-1f, 1f);
@@ -53,8 +51,6 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-        trailRenderer.enabled = false;
-
         OnCreate?.Invoke(this);
     }
 
@@ -67,10 +63,10 @@ public class Ball : MonoBehaviour
 
         if (!isStarted)
         {
-            Vector3 padPosition = padTransform.position;
-            padPosition.y = startOffsetY;
-
-            transform.position = padPosition;
+            Vector3 pos = new Vector3(pad.transform.position.x + XOffsetFromPadCentre, pad.transform.position.y + startOffsetY, 0);
+            transform.position = pos;
+            
+            Debug.Log(pos.y);
 
             if(Game.IsAutoplay) // запускаем мяч автоматически
             {
@@ -97,7 +93,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private void StartBall()
+    public void StartBall()
     {
         isStarted = true;
         trailRenderer.enabled = true;
@@ -119,6 +115,7 @@ public class Ball : MonoBehaviour
     {
         gameSpeed *= speedFactor;
         gameSpeed = Mathf.Clamp(gameSpeed, minSpeed, maxSpeed);
+        rb.velocity = gameSpeed * (rb.velocity.normalized);
     }
     private void StopBall()
     {
@@ -128,7 +125,6 @@ public class Ball : MonoBehaviour
         rb.angularVelocity = 0f;
         XOffsetFromPadCentre = transform.position.x - pad.transform.position.x;
     }
-    
  
     #endregion
     

@@ -6,14 +6,13 @@ public class MainMenu : MonoBehaviour
 {
     #region Variables
 
-    [Header("UI")]
-
-    [SerializeField] private Button playButton;
+    [Header("UI")] [SerializeField] private Button playButton;
     [SerializeField] private Button exitButton;
 
     #endregion
 
     #region UnityLifecycle
+
     private void Start()
     {
         playButton.onClick.AddListener(PlayClickHandler);

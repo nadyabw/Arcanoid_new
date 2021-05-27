@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private LifesView lifesView; // вьюшка жизней
+    [SerializeField] private LifesView lifesView;
     [SerializeField] private Transform canvasTransform;
     [SerializeField] private GameObject pauseViewPrefab;
     [SerializeField] private GameObject gameOverPrefab;
@@ -22,7 +22,8 @@ public class Game : MonoBehaviour
     private static int totalScore = 0;
     private static bool isPaused;
     private static bool isAutoplay;
-    
+
+    private List<Ball> activeBalls = new List<Ball>();
 
     #endregion
 
@@ -39,27 +40,29 @@ public class Game : MonoBehaviour
     private void Start()
     {
         isPaused = false;
-        isAutoplay = settings.isAutoplayMode; // считываем режим игры из настроек
+        isAutoplay = settings.isAutoplayMode;
 
         if (lifesLeft == 0)
         {
             lifesLeft = settings.lifesTotal;
             totalScore = 0;
         }
+
         UpdeteScoreText();
         lifesView.InitLifes(lifesLeft, settings.lifesTotal);
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
         }
+
         // код для добавления жизней
         if (Input.GetKeyDown(KeyCode.F))
         {
-           AddLife(1);
+            ChangeLife(1);
         }
     }
 
@@ -82,51 +85,83 @@ public class Game : MonoBehaviour
         Block.OnCreate += HandleBlockCreate;
         Block.OnDestroy += HandleBlockDestroy;
         Floor.onBallLoss += HandleBallLoss;
+        Ball.OnCreate += HandleBallCreated;
         PauseView.OnClose += HandlePauseClose;
         GameOverView.OnClose += HandleGameOverClose;
         PickUpScore.OnPickUpScoreCollected += HandlePickUpScoreDownCollected;
         PickUpLifes.OnPickUpLifeCollected += HandlePickUpLifeCollected;
+        PickUpAddBalls.OnPickUpAddBallsCollected += HandlePickUpAddBallsCollected;
     }
 
     private void RemoveHandlers()
     {
         Block.OnCreate -= HandleBlockCreate;
         Block.OnDestroy -= HandleBlockDestroy;
+        Ball.OnCreate -= HandleBallCreated;
         Floor.onBallLoss -= HandleBallLoss;
         PauseView.OnClose -= HandlePauseClose;
         GameOverView.OnClose -= HandleGameOverClose;
         PickUpScore.OnPickUpScoreCollected -= HandlePickUpScoreDownCollected;
         PickUpLifes.OnPickUpLifeCollected += HandlePickUpLifeCollected;
+        PickUpAddBalls.OnPickUpAddBallsCollected -= HandlePickUpAddBallsCollected;
     }
 
     private void HandleGameOverClose()
     {
         SceneManager.LoadScene(0);
     }
+
     private void HandlePauseClose()
     {
         TogglePause();
     }
+
     private void HandleBallLoss(GameObject ball)
     {
-        lifesLeft--;
-        lifesView.UpdateLifes(lifesLeft);
+        bool isAllBallsLost = RemoveActiveBall(ball);
 
-        if (lifesLeft > 0)
+        if (isAllBallsLost)
         {
-            Instantiate(ball);
+            Debug.Log(lifesLeft);
+            
+            lifesLeft--;
+            lifesView.UpdateLifes(lifesLeft);
+
+            if (lifesLeft > 0)
+            {
+                Instantiate(ball);
+            }
+            else
+            {
+                isPaused = true;
+                Instantiate(gameOverPrefab, canvasTransform);
+            }
         }
-        else
+    }
+
+    private void HandleBallCreated(Ball b)
+    {
+        activeBalls.Add(b);
+    }
+
+    private bool RemoveActiveBall(GameObject ball)
+    {
+        for (int i = 0; i < activeBalls.Count; i++)
         {
-            isPaused = true;
-            Instantiate(gameOverPrefab, canvasTransform);
+            if (activeBalls[i].gameObject == ball)
+            {
+                activeBalls.RemoveAt(i);
+                break;
+            }
         }
+
+        return activeBalls.Count == 0;
     }
 
     private void HandleBlockDestroy(Block block)
     {
         blocksNumberToFinish--;
-        AddScore(block.ScoreForDestroy);
+        ChangeScore(block.ScoreForDestroy);
 
         if (blocksNumberToFinish == 0)
         {
@@ -141,9 +176,10 @@ public class Game : MonoBehaviour
             }
         }
     }
+
     private void HandlePickUpScoreDownCollected(PickUpScore psd)
     {
-        AddScore(psd.Score);
+        ChangeScore(psd.Score);
     }
 
     private void HandleBlockCreate(bool isUndestroyable)
@@ -153,6 +189,7 @@ public class Game : MonoBehaviour
             blocksNumberToFinish++;
         }
     }
+
     private void TogglePause()
     {
         isPaused = !isPaused;
@@ -169,9 +206,28 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void AddScore(int value)
+    private void HandlePickUpAddBallsCollected(PickUpAddBalls pab)
+    {
+        Ball ball;
+
+        foreach (var b in activeBalls)
+        {
+            for (int i = 0; i < pab.BallsNumberToAdd; i++)
+            {
+                ball = Instantiate(b);
+                ball.StartBall();
+            }
+        }
+    }
+
+    public void ChangeScore(int value)
     {
         totalScore += value;
+        if (totalScore < 0)
+        {
+            totalScore = 0;
+        }
+
         UpdeteScoreText();
     }
 
@@ -179,19 +235,13 @@ public class Game : MonoBehaviour
     {
         textScore.text = $"Score: {totalScore}";
     }
-    
+
     private void HandlePickUpLifeCollected(PickUpLifes plu)
     {
-        if (plu.IsLifeAdd == true)
-            AddLife(1);
-        else
-        {
-            AddLife(-1);
-        }
-        
+        ChangeLife(plu.LifesNumber);
     }
 
-    private void AddLife(int lifesNum)
+    private void ChangeLife(int lifesNum)
     {
         lifesLeft += lifesNum;
         if (lifesLeft > settings.lifesTotal)
@@ -208,6 +258,4 @@ public class Game : MonoBehaviour
     }
 
     #endregion
-
-   
 }

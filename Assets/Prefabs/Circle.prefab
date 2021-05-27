@@ -120,6 +120,6 @@ MonoBehaviour:
   isUnderstroyable: 0
   isInvisible: 0
   pickUpPrefabs:
-  - {fileID: 7824714240583724469, guid: cad6f8bb8ce5ef447a99685e737af5bc, type: 3}
-  - {fileID: 7824714240583724469, guid: cad6f8bb8ce5ef447a99685e737af5bc, type: 3}
-  bonusCreateProbability: 30
+  - {fileID: 7824714240583724469, guid: 84326cd0cb927b94186d518b7ab50e84, type: 3}
+  - {fileID: 7824714240583724469, guid: 19e76dfa2be39b041bdf3367157ce8de, type: 3}
+  bonusCreateProbability: 100

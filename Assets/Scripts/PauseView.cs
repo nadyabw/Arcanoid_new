@@ -6,9 +6,7 @@ public class PauseView : MonoBehaviour
 {
     #region Variables
 
-    [Header("UI")]
-
-    [SerializeField] private Button continueButton;
+    [Header("UI")] [SerializeField] private Button continueButton;
     [SerializeField] private Button exitButton;
 
     #endregion
@@ -38,7 +36,11 @@ public class PauseView : MonoBehaviour
 
     private void ExitClickHandler()
     {
-        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 
     #endregion

@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class PickUpLifes : BasePickUp
 {
-    [SerializeField] private bool isLifeAdd;
+    [SerializeField] private int lifesNumber = 1;
     public static event Action<PickUpLifes> OnPickUpLifeCollected;
-    public bool IsLifeAdd
+
+    public int LifesNumber
     {
-        get => isLifeAdd;
+        get => lifesNumber;
     }
 
     protected override void ApplyEffect()
